@@ -22,9 +22,9 @@ def random_courier_payload():
     first_name = generate_random_string(10)
 
     return {
-        "login": login,
-        "password": password,
-        "firstName": first_name
+        'login': login,
+        'password': password,
+        'firstName': first_name
     }
 
 
@@ -44,8 +44,8 @@ def new_courier(scooter_api, random_courier_payload):
 
     if login_pass:
         response = scooter_api.login_courier(payload={
-            "login": login_pass[0],
-            "password": login_pass[1]
+            'login': login_pass[0],
+            'password': login_pass[1]
         })
         scooter_api.delete_courier(courier_id=response.json()['id'])
 
@@ -58,7 +58,7 @@ def new_courier_response(scooter_api, random_courier_payload):
 
     if response.status_code == 201:
         response = scooter_api.login_courier(payload={
-            "login": random_courier_payload['login'],
-            "password": random_courier_payload['password']
+            'login': random_courier_payload['login'],
+            'password': random_courier_payload['password']
         })
         scooter_api.delete_courier(courier_id=response.json()['id'])

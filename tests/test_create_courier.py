@@ -1,6 +1,6 @@
 class TestCreateCourier:
     def test_create_success(self, new_courier):
-        assert new_courier != {}
+        assert new_courier != []
 
     def test_no_create_same(self, new_courier, scooter_api):
         response = scooter_api.create_courier(payload={
@@ -10,7 +10,7 @@ class TestCreateCourier:
         })
         assert response.status_code == 409
 
-    def test_create_only_required_fields(self, scooter_api):
+    def test_create_no_required_fields_error(self, scooter_api):
         response = scooter_api.create_courier(payload={})
         assert response.status_code == 400
 
@@ -25,7 +25,7 @@ class TestCreateCourier:
             "login": random_courier_payload['login'],
             "password": random_courier_payload['password']
         })
-        assert response == 400
+        assert response.status_code == 400
 
     def test_create_user_duplicate_login(self, new_courier, scooter_api):
         response = scooter_api.create_courier(payload={
