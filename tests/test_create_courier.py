@@ -1,5 +1,6 @@
 import allure
 
+
 class TestCreateCourier:
     @allure.title("Успешное создание курьера")
     @allure.description("Проверка что курьера можно создать")
@@ -28,6 +29,33 @@ class TestCreateCourier:
         response = courier_api.create_courier(payload={})
         assert response.status_code == 400
 
+    @allure.title("Создание курьера без обязательного поля login")
+    @allure.description("Проверка что без login возвращается ошибка")
+    def test_create_no_required_login_return_error(self, courier_api, random_courier_payload):
+        response = courier_api.create_courier(payload={
+            "password": random_courier_payload['password'],
+            "firstName": random_courier_payload['firstName']
+        })
+        assert response.status_code == 400
+
+    @allure.title("Создание курьера без обязательного поля firstName")
+    @allure.description("Проверка что без firstName возвращается ошибка")
+    def test_create_no_required_firstname_return_error(self, courier_api, random_courier_payload):
+        response = courier_api.create_courier(payload={
+            "login": random_courier_payload['login'],
+            "password": random_courier_payload['password']
+        })
+        assert response.status_code == 400
+
+    @allure.title("Создание курьера без обязательного поля password")
+    @allure.description("Проверка что без password возвращается ошибка")
+    def test_create_no_required_password_return_error(self, courier_api, random_courier_payload):
+        response = courier_api.create_courier(payload={
+            "login": random_courier_payload['login'],
+            "firstName": random_courier_payload['firstName']
+        })
+        assert response.status_code == 400
+
     @allure.title("Правильный код ответа при создании курьера")
     @allure.description("Проверка что успешный запрос возвращает статус 201")
     def test_status_code(self, new_courier_response):
@@ -37,15 +65,6 @@ class TestCreateCourier:
     @allure.description("Проверка что успешный запрос возвращает {'ok': true}")
     def test_return_success_body(self, new_courier_response):
         assert new_courier_response.json() == {'ok': True}
-
-    @allure.title("Ошибка при отсутствии обязательного поля firstName")
-    @allure.description("Проверка что без firstName возвращается ошибка")
-    def test_empty_required_firstname_return_error(self, courier_api, random_courier_payload):
-        response = courier_api.create_courier(payload={
-            "login": random_courier_payload['login'],
-            "password": random_courier_payload['password']
-        })
-        assert response.status_code == 400
 
     @allure.title("Ошибка при создании курьера с существующим логином")
     @allure.description("Проверка что нельзя создать курьера с уже существующим логином")
