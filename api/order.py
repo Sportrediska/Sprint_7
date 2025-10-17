@@ -1,5 +1,4 @@
 import requests
-
 from url import BASE_URL
 
 

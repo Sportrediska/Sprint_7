@@ -82,3 +82,13 @@ def random_order_payload():
         "deliveryDate": fake.date_between(start_date='today', end_date='+30d').strftime('%Y-%m-%d'),
         "comment": fake.text(max_nb_chars=50)
     }
+
+
+@pytest.fixture
+def login_delete_courier(courier_api):
+    def delete_courier(payload):
+        response = courier_api.login_courier(payload)
+        if response.status_code == 200:
+            courier_api.delete_courier(response.json()['id'])
+
+    return delete_courier

@@ -3,8 +3,14 @@ import allure
 class TestCreateCourier:
     @allure.title("Успешное создание курьера")
     @allure.description("Проверка что курьера можно создать")
-    def test_create_success(self, new_courier):
-        assert new_courier != []
+    def test_create_success(self, courier_api, random_courier_payload, login_delete_courier):
+        response = courier_api.create_courier(payload={
+            "login": random_courier_payload['login'],
+            "password": random_courier_payload['password'],
+            "firstName": random_courier_payload['firstName']
+        })
+        assert response.json() != []
+        login_delete_courier(random_courier_payload)
 
     @allure.title("Нельзя создать двух одинаковых курьеров")
     @allure.description("Проверка что нельзя создать курьера с одинаковыми данными")

@@ -19,35 +19,32 @@ class TestLoginCourier:
 
     @allure.title("Ошибка авторизации без обязательных полей")
     @allure.description("Проверка что для авторизации нужны все обязательные поля")
-    def test_authorization_no_required_fields_error(self, courier_api, random_courier_payload):
+    def test_authorization_no_required_fields_error(self, courier_api, random_courier_payload, login_delete_courier):
         courier_api.create_courier(payload=random_courier_payload)
         response = courier_api.login_courier(payload={})
         assert response.status_code == 400
-        response = courier_api.login_courier(random_courier_payload)
-        courier_api.delete_courier(response.json()['id'])
+        login_delete_courier(random_courier_payload)
 
     @allure.title("Ошибка авторизации с неправильным паролем")
     @allure.description("Проверка ошибки при неправильном пароле")
-    def test_authorization_incorrect_password_error(self, courier_api, random_courier_payload):
+    def test_authorization_incorrect_password_error(self, courier_api, random_courier_payload, login_delete_courier):
         courier_api.create_courier(payload=random_courier_payload)
         response = courier_api.login_courier(payload={
             'login': random_courier_payload['login'],
             'password': 'kaviryaka'
         })
         assert response.status_code == 404
-        response = courier_api.login_courier(random_courier_payload)
-        courier_api.delete_courier(response.json()['id'])
+        login_delete_courier(random_courier_payload)
 
     @allure.title("Ошибка авторизации без логина")
     @allure.description("Проверка ошибки при отсутствии логина")
-    def test_empty_required_login_error(self, courier_api, random_courier_payload):
+    def test_empty_required_login_error(self, courier_api, random_courier_payload, login_delete_courier):
         courier_api.create_courier(payload=random_courier_payload)
         response = courier_api.login_courier(payload={
             'password': random_courier_payload['password']
         })
         assert response.status_code == 400
-        response = courier_api.login_courier(random_courier_payload)
-        courier_api.delete_courier(response.json()['id'])
+        login_delete_courier(random_courier_payload)
 
     @allure.title("Ошибка авторизации несуществующего курьера")
     @allure.description("Проверка ошибки при авторизации под несуществующим пользователем")
