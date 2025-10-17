@@ -1,10 +1,11 @@
 import requests
+from url import BASE_URL
 
 
 class CourierApi:
 
     def __init__(self):
-        self.base_url = 'https://qa-scooter.praktikum-services.ru'
+        self.base_url = BASE_URL
 
     def login_courier(self, payload):
         return requests.post(self.base_url + '/api/v1/courier/login', json=payload)
